@@ -1,4 +1,3 @@
-//c43e0679
 import React, { useState } from "react";
 import { useEffect } from "react";
 
@@ -7,6 +6,7 @@ import MovieCard from "./MovieCard";
 import './App.css';
 import SearchIcon from './search.svg';
 
+//The code below is the api-key for the omdbapi
 //c43e0679
 const API_URL = 'http://www.omdbapi.com?apikey=c43e0679';
 
