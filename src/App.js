@@ -1,68 +1,58 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import MovieCard from "./MovieCard";
-
-import './App.css';
-import SearchIcon from './search.svg';
+import SearchIcon from "./search.svg";
+import "./App.css";
 
 //The code below is the api-key for the omdbapi
 //c43e0679
-const API_URL = 'http://www.omdbapi.com?apikey=c43e0679';
+const API_URL = "http://www.omdbapi.com?apikey=b6003d8a";
 
-const App =() => {
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [movies, setMovies] = useState([]);
 
-    const [movies, setMovies] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
+  useEffect(() => {
+    searchMovies("Batman");
+  }, []);
 
-    useEffect(() => {
-        searchMovies('Superman');
-    }, []);
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
 
-    const searchMovies = async (title) => {
-        const response = await fetch(`${API_URL}&s=${title}`);
-        const data = await response.json();
+    setMovies(data.Search);
+  };
 
-        setMovies(data.Search);
-        console.log(data.Search);
-    };
+  return (
+    <div className="app">
+      <h1>MovieLand</h1>
 
-    return (
-        <div className="app">
-            <h1>MovieLand</h1>
+      <div className="search">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for movies"
+        />
+        <img
+          src={SearchIcon}
+          alt="search"
+          onClick={() => searchMovies(searchTerm)}
+        />
+      </div>
 
-            <div className="search">
-                <input
-                placeholder="Search for movies"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <img
-                src={SearchIcon}
-                alt="search"
-                onClick={() => searchMovies(searchTerm)}
-                />
-            </div>
-
-            {
-               movies?.length > 0 
-               ? (
-                <div className="container">
-                    {movies.map((movie, index) => (
-                        <MovieCard key={index} movie={movie}/>
-                    ))}
-                </div>
-               ) : (
-                <div className="empty">
-                    <h2>No movies found</h2>
-                </div>
-               )
-            }        
-        </div>              
-    );
-}
+      {movies?.length > 0 ? (
+        <div className="container">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty">
+          <h2>No movies found</h2>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default App;
-
-
-
